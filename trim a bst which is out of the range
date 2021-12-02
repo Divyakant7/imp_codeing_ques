@@ -1,0 +1,35 @@
+/*
+
+Given a binary search tree root, an integer lo, and another an integer hi, remove all nodes that are not between [lo, hi] inclusive.
+
+Constraints
+
+n ≤ 100,000 where n is the number of nodes in root
+
+*/
+
+
+/**
+ * class Tree {
+ *     public:
+ *         int val;
+ *         Tree *left;
+ *         Tree *right;
+ * };
+ */
+Tree* solve(Tree* root, int lo, int hi) {
+    if(!root) return NULL;
+    if(root->val>=lo&&root->val<=hi){
+        root->left = solve(root->left,lo,hi);
+        root->right = solve(root->right,lo,hi);
+    }
+    else if(root->val<lo){
+        root->left = NULL;
+        root = solve(root->right,lo,hi);
+    }
+    else{
+        root->right = NULL;
+        root = solve(root->left,lo,hi);
+    }
+    return root;
+}
