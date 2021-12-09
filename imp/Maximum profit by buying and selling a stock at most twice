@@ -1,0 +1,103 @@
+/*
+
+Efficient Approach: The idea used here is to keep track of the two transactions at the same time. The two stocks profit is computed as follows 
+
+Maximum Profit for the First Transaction 
+Find the minimum price we have to pay from our pocket (buy1) to get 1st stock which is the price of the stock on that day or on any previous day.
+Find the maximum profit by selling the 1st stock which on the current day.
+Maximum profit for the second Transaction 
+The minimum price we have to pay from our pocket to buy second stocks will be
+buy2 = price[i] - profit1, 
+// Profit 1 is the profit from 
+// selling the first stock
+Find the maximum profit (profit2) by selling the 2nd stock.
+Explanation with Example: 
+
+Let us take price[] = { 3, 5, 4, 5} 
+We buy 1st stock on day 1 
+buy1 = 3.
+We sell 1st stock on day 2. 
+profit1 = 5 – 3 = 2.
+We will make a profit of 2 after buying the stock on 1st day and selling on 2nd day. 
+So, profit1 = 2
+Now we will buy the 2nd stock on 3rd day
+Stock price on 3rd day is 4 
+Since we already made a profit of 2, We will spend only 2 extra from our packet to buy the stock 
+i.e., (4 – profit1) = 2
+buy2 = 2
+Now, we will sell second stock on day 4.
+Stock price on 4th day is 5. 
+profit2 = 5 – buy2 = 5 – 2 = 3.
+Now, we can see that the final profit includes the profit of buying and selling two stocks 
+ 
+
+
+*/
+
+// C++ implmenetation to find
+// maximum possible profit
+// with at most two transactions
+
+#include <bits/stdc++.h>
+using namespace std;
+
+// Function to find the maximum
+// profit with two transactions
+// on a given list of stock prices
+int maxProfit(int price[], int n)
+{
+
+	// buy1 - Money lent to buy 1 stock
+	// profit1 - Profit after selling
+	// the 1st stock buyed.
+	// buy2 - Money lent to buy 2 stocks
+	// including profit of selling 1st stock
+	// profit2 - Profit after selling 2 stocks
+	int buy1, profit1, buy2, profit2;
+
+	// Set initial buying values to
+	// INT_MAX as we want to minimize it
+	buy1 = buy2 = INT_MAX;
+
+	// Set initial selling values to
+	// zero as we want to maximize it
+	profit1 = profit2 = 0;
+
+	for (int i = 0; i < n; i++) {
+
+		// Money lent to buy the stock
+		// should be minimum as possible.
+		// buy1 tracks the minimum possible
+		// stock to buy from 0 to i-1.
+		buy1 = min(buy1, price[i]);
+
+		// Profit after selling a stock
+		// should be maximum as possible.
+		// profit1 tracks maximum possible
+		// profit we can make from 0 to i-1.
+		profit1 = max(profit1, price[i] - buy1);
+
+		// Now for buying the 2nd stock,
+		// we will integrate profit made
+		// from selling the 1st stock
+		buy2 = min(buy2, price[i] - profit1);
+
+		// Profit after selling a 2 stocks
+		// should be maximum as possible.
+		// profit2 tracks maximum possible
+		// profit we can make from 0 to i-1.
+		profit2 = max(profit2, price[i] - buy2);
+	}
+
+	return profit2;
+}
+
+// Driver Code
+int main()
+{
+	int price[] = { 2, 30, 15, 10, 8, 25, 80 };
+	int n = sizeof(price) / sizeof(price[0]);
+	cout << "Maximum Profit = "
+		<< maxProfit(price, n);
+	return 0;
+}
