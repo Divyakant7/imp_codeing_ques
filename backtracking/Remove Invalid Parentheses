@@ -1,0 +1,65 @@
+Given a string s that contains parentheses and letters, remove the minimum number of invalid parentheses to make the input string valid.
+
+Return all the possible results. You may return the answer in any order.
+
+ 
+
+Example 1:
+
+Input: s = "()())()"
+Output: ["(())()","()()()"]
+Example 2:
+
+Input: s = "(a)())()"
+Output: ["(a())()","(a)()()"]
+Example 3:
+
+Input: s = ")("
+Output: [""]
+
+
+vector<string>ans;
+    unordered_set<string>uset;
+    unordered_map<string,int>mp;
+    int check(string sh){
+        stack<char>k;
+        for(int i=0;i<sh.size();i++){
+            if(sh[i]==')'){
+                if(k.size()==0){k.push(sh[i]);}
+                else if(k.top()=='('){k.pop();}
+                else k.push(sh[i]);
+            }
+            else if(sh[i]=='('){
+                k.push(sh[i]);
+            }
+        }
+        return k.size();
+    }
+    void solve(string d,int mra){
+        if(mra==0){
+            int mnnow = check(d);
+            if(mnnow==0){
+                if(mp[d]==0){
+                   ans.push_back(d);
+                    mp[d]++;
+                }
+            }
+            return;
+        }
+        for(int i=0;i<d.length();i++){
+            if(d[i]!='('&&d[i]!=')'){
+                continue;
+            }
+            string left = d.substr(0,i);
+            string right = d.substr(i+1);
+            string temp = left+right;
+            if(uset.find(temp)==uset.end()){
+              uset.insert(temp);
+            solve(temp,mra-1);}
+        }
+    }
+    vector<string> removeInvalidParentheses(string s) {
+       int mn = check(s);
+        solve(s,mn);
+        return ans;
+    }
