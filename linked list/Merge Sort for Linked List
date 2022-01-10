@@ -1,0 +1,46 @@
+Given Pointer/Reference to the head of the linked list, the task is to Sort the given linked list using Merge Sort.
+Note: If the length of linked list is odd, then the extra node should go in the first list while splitting.
+
+Example 1:
+
+Input:
+N = 5
+value[]  = {3,5,2,4,1}
+Output: 1 2 3 4 5
+Explanation: After sorting the given
+linked list, the resultant matrix
+will be 1->2->3->4->5.
+
+
+
+  Node* merge(Node* a,Node* b){
+        Node *result;
+        if(!a)return b;
+        if(!b)return a;
+        if(a->data<=b->data){
+            result = a;
+            result->next = merge(a->next,b);
+        }
+        else{
+            result = b;
+            result->next = merge(a,b->next);
+        }
+        return result;
+    }
+    Node* mergeSort(Node* head) {
+        // your code here
+        if(!head || !head->next) return head; //base case for recusion or if the linked list is actually null or there's only 1 node
+        Node *slow=head, *fast=head; //hare&tortoise Algorithm
+        
+        while(fast->next && fast->next->next){
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        Node* head2 = slow->next; //Fix the head of the second half
+        slow->next = NULL; //separate the two halves
+        
+        Node *A = mergeSort(head), *B = mergeSort(head2); //recursively divide the list into 2 halves
+        Node *final_head = merge(A, B); 
+        return final_head;
+        
+    }
