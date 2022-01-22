@@ -1,0 +1,38 @@
+Given a string S, find the length of the longest substring without repeating characters.
+
+
+Example 1:
+
+Input:
+S = "geeksforgeeks"
+Output:
+7
+Explanation:
+Longest substring is
+"eksforg".
+Example 2:
+
+Input:
+S = "abdefgabef"
+Output:
+6
+Explanation:
+Longest substring are
+"abdefg" , "bdefga" and "defgab".
+
+
+int longestUniqueSubsttr(string S){
+        //code
+        int ans= 0;
+        vector<int>vis(256,-1);
+        int start = -1;
+        for(int i =0;i<S.length();i++){
+            if(vis[S[i]]>start){
+                start = vis[S[i]];
+            }
+            vis[S[i]] = i;
+            ans = max(ans,i-start);
+        }
+        return ans;
+        
+    }
