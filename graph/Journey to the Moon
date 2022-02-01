@@ -1,0 +1,65 @@
+The member states of the UN are planning to send  people to the moon. They want them to be from different countries. You will be given a list of pairs of astronaut ID's. Each pair is made of astronauts from the same country. Determine how many pairs of astronauts from different countries they can choose from.
+
+Example
+
+
+
+There are  astronauts numbered  through . Astronauts grouped by country are  and . There are  pairs to choose from:  and .
+
+Function Description
+
+Complete the journeyToMoon function in the editor below.
+
+journeyToMoon has the following parameter(s):
+
+int n: the number of astronauts
+int astronaut[p][2]: each element  is a  element array that represents the ID's of two astronauts from the same country
+Returns
+- int: the number of valid pairs
+
+Input Format
+
+The first line contains two integers  and , the number of astronauts and the number of pairs.
+Each of the next  lines contains  space-separated integers denoting astronaut ID's of two who share the same nationality.
+
+5 3
+0 1
+2 3
+0 4
+
+6
+
+#include <bits/stdc++.h>
+
+using namespace std;
+void dfs(int node,vector<int>adj[],vector<bool>&vis,unsigned long long int &counter){
+    vis[node]  = true;
+    counter++;
+    for(auto child:adj[node]){
+        if(vis[child]==false){
+            dfs(child,adj,vis,counter);
+        }
+    }
+}
+
+int main(){
+    int n,m;
+    cin>>n>>m;
+    int a,b;
+    vector<int>adj[n];
+    for(int i=0;i<m;i++){
+        cin>>a>>b;
+        adj[a].push_back(b);
+        adj[b].push_back(a);
+    }
+    vector<bool>vis(n+1,false);
+    unsigned long long int total = (n*(n-1))/2;
+    for(int i=0;i<n;i++){
+        unsigned long long int counter = 0;
+        if(vis[i]==false){
+            dfs(i,adj,vis,counter);
+        }
+        total = total-(counter*(counter-1)/2);
+    }
+    cout<<total<<endl;
+}
